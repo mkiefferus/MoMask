@@ -19,7 +19,7 @@ def get_dataset_motion_loader(opt_path, batch_size, fname, device):
         split_file = pjoin(opt.data_root, '%s.txt'%fname)
         dataset = Text2MotionDatasetEval(opt, mean, std, split_file, w_vectorizer)
         dataloader = DataLoader(dataset, batch_size=batch_size, num_workers=4, drop_last=True,
-                                collate_fn=collate_fn, shuffle=True)
+                                collate_fn=collate_fn, shuffle=False)
     else:
         raise KeyError('Dataset not Recognized !!')
 

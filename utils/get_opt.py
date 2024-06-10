@@ -48,8 +48,8 @@ def get_opt(opt_path, device, **kwargs):
                     opt_dict[key] = int(value)
                 else:
                     opt_dict[key] = str(value)
-
-    # print(opt)
+    
+    
     opt_dict['which_epoch'] = 'finest'
     opt.save_root = pjoin(opt.checkpoints_dir, opt.dataset_name, opt.name)
     opt.model_dir = pjoin(opt.save_root, 'model')
@@ -64,6 +64,7 @@ def get_opt(opt_path, device, **kwargs):
         opt.max_motion_length = 196
         opt.max_motion_frame = 196
         opt.max_motion_token = 55
+        opt.max_text_len = 77 # TODO: revert
     elif opt.dataset_name == 'kit':
         opt.data_root = './dataset/KIT-ML/'
         opt.motion_dir = pjoin(opt.data_root, 'new_joint_vecs')
