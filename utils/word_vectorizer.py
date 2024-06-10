@@ -62,22 +62,26 @@ class WordVectorizer(object):
         return len(self.word2vec)
 
     def __getitem__(self, item):
-        word, pos = item.split('/')
-        if word in self.word2vec:
-            word_vec = self.word2vec[word]
-            vip_pos = None
-            for key, values in VIP_dict.items():
-                if word in values:
-                    vip_pos = key
-                    break
-            if vip_pos is not None:
-                pos_vec = self._get_pos_ohot(vip_pos)
+        try:
+            word, pos = item.split('/')
+            if word in self.word2vec:
+                word_vec = self.word2vec[word]
+                vip_pos = None
+                for key, values in VIP_dict.items():
+                    if word in values:
+                        vip_pos = key
+                        break
+                if vip_pos is not None:
+                    pos_vec = self._get_pos_ohot(vip_pos)
+                else:
+                    pos_vec = self._get_pos_ohot(pos)
             else:
-                pos_vec = self._get_pos_ohot(pos)
-        else:
-            word_vec = self.word2vec['unk']
-            pos_vec = self._get_pos_ohot('OTHER')
-        return word_vec, pos_vec
+                word_vec = self.word2vec['unk']
+                pos_vec = self._get_pos_ohot('OTHER')
+            return word_vec, pos_vec
+        except:
+            print('Error: ', item)
+            return self.word2vec['unk'], self._get_pos_ohot('OTHER')
 
 
 class WordVectorizerV2(WordVectorizer):
@@ -87,10 +91,13 @@ class WordVectorizerV2(WordVectorizer):
 
     def __getitem__(self, item):
         word_vec, pose_vec = super(WordVectorizerV2, self).__getitem__(item)
-        word, pos = item.split('/')
-        if word in self.word2vec:
-            return word_vec, pose_vec, self.word2idx[word]
-        else:
+        try:
+            word, pos = item.split('/')
+            if word in self.word2vec:
+                return word_vec, pose_vec, self.word2idx[word]
+            else:
+                return word_vec, pose_vec, self.word2idx['unk']
+        except:
             return word_vec, pose_vec, self.word2idx['unk']
 
     def itos(self, idx):
